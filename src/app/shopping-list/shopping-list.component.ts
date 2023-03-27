@@ -11,5 +11,4 @@ export class ShoppingListComponent {
     new Ingredient('apple',  10),
     new Ingredient('tomato',  5)
   ];
-
 }
