@@ -21,7 +21,8 @@ export class RecipeDetailComponent implements OnInit{
   ngOnInit(){
     this.route.params.subscribe(
       (params : Params) => {
-        const selectedRecipe = this.recipeService.getRecipe(params['id']) as Recipe;
+        this.id = params['id'];
+        const selectedRecipe = this.recipeService.getRecipe(this.id) as Recipe;
         if(selectedRecipe){
           this.recipe = selectedRecipe;
         } else {
@@ -39,5 +40,12 @@ export class RecipeDetailComponent implements OnInit{
 
   onEdit(){
     this.router.navigate(['edit'],{relativeTo: this.route})
+  }
+
+  onDelete(index:number){
+    console.log(index)
+    this.recipeService.deleteRecipe(index);
+    this.recipeService.recipeChanged.next();
+    this.router.navigate([],{relativeTo: this.route})
   }
 }

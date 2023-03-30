@@ -1,4 +1,3 @@
-import { NgFor } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { FormGroup, NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
