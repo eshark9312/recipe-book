@@ -25,16 +25,15 @@ export class DataStorageService {
   }
 
   fetchRecipes(){
-    this.http.get<Recipe[]>('http://localhost:3000/api/v1/ngRecipes')
+    return this.http.get<Recipe[]>('http://localhost:3000/api/v1/ngRecipes')
     .pipe(map( recipes =>{
       return recipes.map( recipe => {
         return {...recipe, ingredients: recipe.ingredients ? recipe.ingredients : []};
       })
+    }), tap( recipes =>{
+      this.recipeService.setRecipes(recipes);
     }))
-    .subscribe(response => {
-          this.recipeService.setRecipes(response);
-        }
-    )
+    
   }
 
 }
