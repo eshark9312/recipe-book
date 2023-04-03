@@ -21,6 +21,7 @@ import { DataStorageService } from './shared/data-storage.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AuthComponent } from './auth/auth.component';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
+import { AlertComponent } from './shared/alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
     PageNotFoundComponent,
     RecipeEditComponent,
     AuthComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    AlertComponent
   ],
   imports: [
     BrowserModule,
