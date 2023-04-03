@@ -19,14 +19,6 @@ export class RecipesComponent  implements OnInit {
         private router : Router){}
 
   ngOnInit(){
-    this.authService.user
-    .pipe(take(1))
-    .subscribe(user => {
-      if (user){
         this.dataStorageService.fetchRecipes().subscribe();
-      } else {
-        this.router.navigate(['/auth']);
-      }
-    })
   }
 }
