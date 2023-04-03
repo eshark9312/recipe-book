@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { RecipeService } from './recipe.service';
 import { Recipe } from './recipe.model';
 import { DataStorageService } from '../shared/data-storage.service';
+import { AuthService } from '../auth/auth.service';
+import { Router } from '@angular/router';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-recipes',
@@ -11,9 +14,19 @@ import { DataStorageService } from '../shared/data-storage.service';
 export class RecipesComponent  implements OnInit {
   selectedRecipe : Recipe;
   constructor(private recipeService : RecipeService,
-        private dataStorageService:DataStorageService){}
+        private dataStorageService:DataStorageService,
+        private authService : AuthService,
+        private router : Router){}
 
   ngOnInit(){
-    this.dataStorageService.fetchRecipes().subscribe();
+    this.authService.user
+    .pipe(take(1))
+    .subscribe(user => {
+      if (user){
+        this.dataStorageService.fetchRecipes().subscribe();
+      } else {
+        this.router.navigate(['/auth']);
+      }
+    })
   }
 }

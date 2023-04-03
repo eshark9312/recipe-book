@@ -4,4 +4,4 @@ export class User {
     get token(){
         return this._token;
     }
-}
+} 

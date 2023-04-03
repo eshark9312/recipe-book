@@ -6,10 +6,10 @@
 
     <div class="container-fluid">
       <ul class="nav navbar-nav">
-        <li routerLinkActive="active">
+        <li routerLinkActive="active" *ngIf="isAuthenticated">
           <a class="navbar-nav" routerLink="/recipes">Recipes</a>
         </li>
-        <li routerLinkActive="active" *ngIf="isAuthenticated">
+        <li routerLinkActive="active" *ngIf="!isAuthenticated">
           <a class="navbar-nav" routerLink="/auth">Authentication</a>
         </li>
         <li routerLinkActive="active">
@@ -18,7 +18,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li *ngIf="isAuthenticated">
-          <a class="navbar-nav" style="cursor: pointer">Log Out</a>
+          <a class="navbar-nav" style="cursor: pointer" (click)="onLogout()">Log Out</a>
         </li>
         <li class="dropdown" appDropdown *ngIf="isAuthenticated">
           <a style="pointer: cursor" class="dropdown-toggle" role="button"

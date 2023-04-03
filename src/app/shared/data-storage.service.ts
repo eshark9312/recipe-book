@@ -16,34 +16,20 @@ export class DataStorageService {
 
   storeRecipes() {
     const recipes = this.recipeService.getRecipes();
-    this.http
-      .post('http://localhost:3000/api/v1/ngRecipes', recipes, {
-        headers: new HttpHeaders({ 'Access-Control-Allow-Origin': 'true' }),
+    return this.authService.user.pipe(
+      take(1),
+      exhaustMap(user => {
+        return this.http
+        .post<Recipe[]>('http://localhost:3000/api/v1/ngRecipes', recipes, {
+          headers: new HttpHeaders().set('Authorization', 'Bearer '+user.token)
+        })
+      }), 
+      tap(respRecipes => {
+        this.recipeService.setRecipes(respRecipes);
+        console.log(respRecipes)
       })
-      .subscribe((response) => {
-        console.log(response);
-      });
+    );
   }
-
-  fetchRecipes1(){
-    return this.http
-    .get<Recipe[]>('http://localhost:3000/api/v1/ngRecipes', {
-      headers: new HttpHeaders().set('Authentication', 'Bearer '+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZ2FtaWwuY29tIiwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNjgwMzA4NjcwLCJleHAiOjE2ODAzOTUwNzB9.ae-ZpKGFHRQzDmIePOkyaEwxH15C-IcSbZ19GFHoqso')
-    }).pipe(
-      map((recipes) => {
-        return recipes.map((recipe) => {
-          return {
-            ...recipe,
-            ingredients: recipe.ingredients ? recipe.ingredients : [],
-          };
-        });
-      }),
-      tap((recipes) => {
-        this.recipeService.setRecipes(recipes);
-      })
-    )
-  }
-
 
   fetchRecipes() {
     return this.authService.user.pipe(
@@ -52,7 +38,7 @@ export class DataStorageService {
         console.log(user)
         return this.http
           .get<Recipe[]>('http://localhost:3000/api/v1/ngRecipes', {
-            headers: new HttpHeaders().set('Authentication', 'Bearer '+user.token)
+            headers: new HttpHeaders().set('Authorization', 'Bearer '+user.token)
           })
       }),
       map((recipes) => {

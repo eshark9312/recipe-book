@@ -43,8 +43,19 @@ export class AuthService {
         }),
         tap((resData) => {
           const user = new User(resData.email, resData.token);
+          localStorage.setItem('userData',JSON.stringify(user));
           this.user.next(user);
         })
       );
+  }
+
+  logout(){
+    this.user.next(null);
+    localStorage.removeItem('userData');
+  }
+
+  autoLogin(){
+    const user = JSON.parse(localStorage.getItem('userData'))
+    this.user.next(new User(user.email, user._token));
   }
 }
