@@ -7,28 +7,26 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { AuthComponent } from './auth/auth.component';
 import { RecipesModule } from './recipes/recipes.module';
 import { ShoppingListModule } from './shopping-list/shopping-list.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
+import { AuthModule } from './auth/auth.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    PageNotFoundComponent,
-    AuthComponent
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
     RecipesModule,
     ShoppingListModule,
     SharedModule,
+    AuthModule,
     CoreModule
   ],
   bootstrap: [AppComponent]
