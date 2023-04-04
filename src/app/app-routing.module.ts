@@ -9,7 +9,21 @@ const routes: Routes = [
     loadChildren: () =>
       import('./recipes/recipes.module').then(
         (m) => m.RecipesModule
-      ),
+      )
+  },
+  {
+    path: 'shoppingList',
+    loadChildren: () =>
+      import('./shopping-list/shopping-list.module').then(
+        (m) => m.ShoppingListModule
+      )
+  },
+  {
+    path: 'auth',
+    loadChildren: () =>
+      import('./auth/auth.module').then(
+        (m) => m.AuthModule
+      )
   },
   { path: 'not-found', component: PageNotFoundComponent },
   //{path:'**', redirectTo:'not-found'},
