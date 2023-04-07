@@ -1,12 +1,14 @@
+import { AppState } from './../../store/app.reducer';
+import { take, tap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Ingredient } from 'src/app/shared/ingredient.model';
-import { shoppingListReducer } from 'src/app/shopping-list/store/shopping-list.reducer';
 
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
 import * as ShoppingListActions from '../../shopping-list/store/shopping-list.actions';
+import * as RecipesActions  from './../store/recipes.actions';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -21,29 +23,29 @@ export class RecipeDetailComponent implements OnInit {
     private recipeService: RecipeService,
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store<{ shoppingList: { ingredients: Ingredient[] } }>
+    private store: Store<AppState>
   ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
-      this.id = params['id'];
-      const selectedRecipe = this.recipeService.getRecipe(this.id) as Recipe;
-      if (selectedRecipe) {
-        this.recipe = selectedRecipe;
-      } else {
-        this.router.navigate(['/', 'recipes']);
-      }
+      this.id = +params['id'];
+      this.store.select('recipes').pipe(take(1), tap(recipes =>{
+        const selectedRecipe = recipes.recipes[this.id];
+        if (selectedRecipe) {
+          this.recipe = selectedRecipe;
+        } else {
+          this.router.navigate(['/', 'recipes']);
+        }
+      })).subscribe();
     });
   }
 
   onAddToShoppingList() {
-    //console.log(this.recipe.ingredients)
     this.store.dispatch(
       new ShoppingListActions.AddIngredients(
         this.recipe.ingredients
       )
     );
-    //this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients);
   }
 
   onEdit() {
@@ -51,7 +53,8 @@ export class RecipeDetailComponent implements OnInit {
   }
 
   onDelete(index: number) {
-    this.recipeService.deleteRecipe(index);
+    this.store.dispatch(new RecipesActions.DelRecipe(index))
+    //this.recipeService.deleteRecipe(index);
     this.router.navigate([''], { relativeTo: this.route });
   }
 }

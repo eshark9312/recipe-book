@@ -2,7 +2,6 @@ import { AppState } from './../../store/app.reducer';
 import { Store } from '@ngrx/store';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RecipeService } from '../recipe.service';
-import { Recipe } from '../recipe.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, Observable } from 'rxjs';
 
