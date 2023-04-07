@@ -21,10 +21,8 @@ export function recipesReducer(
       };
     case RecipesActions.DEL_RECIPE:
       const recipeDeleted = state.recipes.filter((recipe, recipeIndex) => {
-        console.log(recipeIndex +':'+action.payload)
         return recipeIndex != action.payload;
       });
-      console.log(recipeDeleted);
       return {
         ...state,
         recipes: [...recipeDeleted],
