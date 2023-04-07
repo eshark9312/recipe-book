@@ -4,7 +4,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 
-import { RecipeService } from '../recipe.service';
 import { take, tap } from 'rxjs/operators';
 import * as RecipesActions from './../store/recipes.actions';
 
@@ -21,7 +20,6 @@ export class RecipeEditComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private recipeService: RecipeService,
     private router: Router,
     private store: Store<AppState>
   ) {}
@@ -47,12 +45,10 @@ export class RecipeEditComponent implements OnInit {
           recipe: this.recipeForm.value
         })
       );
-      //this.recipeService.updateRecipe(this.id, this.recipeForm.value);
     } else {
       this.store.dispatch(
         new RecipesActions.AddRecipe(this.recipeForm.value)
       );
-      //this.recipeService.addRecipe(this.recipeForm.value);
     }
     this.onCancel();
   }

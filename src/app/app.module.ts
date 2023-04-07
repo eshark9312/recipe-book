@@ -14,7 +14,6 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SharedModule } from './shared/shared.module';
-import { CoreModule } from './core.module';
 
 @NgModule({
   declarations: [
@@ -27,7 +26,6 @@ import { CoreModule } from './core.module';
     AppRoutingModule,
     HttpClientModule,
     SharedModule,
-    CoreModule,
     StoreModule.forRoot(appReducer),
     StoreDevtoolsModule.instrument({logOnly: false}),
     //StoreRouterConnectingModule.forRoot(),
