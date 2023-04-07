@@ -15,9 +15,10 @@ export class RecipesComponent  implements OnInit, OnDestroy {
   constructor(private store:Store<AppState>){}
 
   ngOnInit(){
-      this.store.dispatch(new RecipesActions.FectchReceipesStart())
+    this.store.dispatch(new RecipesActions.FectchReceipesStart())
   }
 
   ngOnDestroy(): void {
+
   }
 }

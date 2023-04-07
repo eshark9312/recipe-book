@@ -27,6 +27,18 @@ export function recipesReducer(
         ...state,
         recipes: [...recipeDeleted],
       };
+    case RecipesActions.ADD_RECIPE:
+      return {
+        ...state,
+        recipes: [...state.recipes, action.payload]
+      };
+    case RecipesActions.UPDATE_RECIPE:
+      const recipeUpdated = [...state.recipes];
+      recipeUpdated[action.payload.id] = action.payload.recipe;
+      return {
+        ...state,
+        recipes: [...recipeUpdated]
+      }
     default:
       return state;
   }
