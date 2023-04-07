@@ -1,3 +1,5 @@
+import { AppState } from './../store/app.reducer';
+import { Store } from '@ngrx/store';
 import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -6,19 +8,24 @@ import { take } from 'rxjs/operators';
 import { AlertComponent } from '../shared/alert/alert.component';
 import { PlaceHolderDirective } from '../shared/place-holder.directive';
 import { AuthService, AuthResponse } from './auth.service';
+import * as AuthActions from './store/auth.actions';
+
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.css'],
 })
-export class AuthComponent implements OnDestroy{
+export class AuthComponent implements OnDestroy {
   isLoginMode = true;
   isLoading = false;
-  private closeSub : Subscription = null;
-  @ViewChild(PlaceHolderDirective) alertHost : PlaceHolderDirective;
+  private closeSub: Subscription = null;
+  @ViewChild(PlaceHolderDirective) alertHost: PlaceHolderDirective;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private store: Store<AppState>
+  ) {}
 
   onSubmit(form: NgForm) {
     if (!form.valid) {
@@ -31,19 +38,9 @@ export class AuthComponent implements OnDestroy{
 
     this.isLoading = true;
     if (this.isLoginMode) {
-      this.authService.login(email, password).subscribe(
-        (resData) => {
-          this.router.navigate(['/recipes']);
-          this.isLoading = false;
-          form.reset();
-          console.log('login succeeded');
-        },
-        (errorMessage) => {
-          //this.error = errorMessage;
-          this.isLoading = false;
-          this.showErrorAlert(errorMessage);
-        }
-      );
+      this.store.dispatch(
+        new AuthActions.LoginStart({email, password})
+      )
     } else {
       authObs = this.authService.signUp(email, password);
       authObs.subscribe(
@@ -68,17 +65,17 @@ export class AuthComponent implements OnDestroy{
   }
 
   private showErrorAlert(errorMessage: string) {
-    const alertCompRef = this.alertHost.viewContainerRef.createComponent(AlertComponent);
+    const alertCompRef =
+      this.alertHost.viewContainerRef.createComponent(AlertComponent);
     alertCompRef.instance.message = errorMessage;
-    this.closeSub = alertCompRef.instance.close.pipe(take(1)).subscribe( () => {
-        alertCompRef.destroy();
-        this.closeSub.unsubscribe();
-      }
-    )
+    this.closeSub = alertCompRef.instance.close.pipe(take(1)).subscribe(() => {
+      alertCompRef.destroy();
+      this.closeSub.unsubscribe();
+    });
   }
 
-  ngOnDestroy(){
-    if(this.closeSub){
+  ngOnDestroy() {
+    if (this.closeSub) {
       this.closeSub.unsubscribe();
     }
   }

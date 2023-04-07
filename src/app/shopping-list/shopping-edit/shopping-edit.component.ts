@@ -15,7 +15,6 @@ import * as AppStore from '../../store/app.reducer';
 })
 export class ShoppingEditComponent implements OnInit, OnDestroy {
   formAddItem: FormGroup;
-  subscription: Subscription;
   @ViewChild('f') editForm: FormGroup;
   editMode = false;
   editedItemIndex: number;
@@ -44,7 +43,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    //this.subscription.unsubscribe();
   }
 
   onAddItem(form: NgForm) {

@@ -1,8 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { BehaviorSubject, Subject, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { AppState } from '../store/app.reducer';
 import { User } from './user.model';
+import * as AuthActions from './store/auth.actions';
+
 
 export interface AuthResponse {
   email: string;
@@ -12,9 +16,16 @@ export interface AuthResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  user = new BehaviorSubject<User>(null);
+  //user = new BehaviorSubject<User>(null);
+  private store : Store<AppState>;
+  private http : HttpClient;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    http : HttpClient, store : Store<AppState>
+    ) {
+      this.http = http;
+      this.store = store;
+    }
 
   signUp(email: string, password: string) {
     return this.http
@@ -44,20 +55,20 @@ export class AuthService {
         tap((resData) => {
           const user = new User(resData.email, resData.token);
           localStorage.setItem('userData',JSON.stringify(user));
-          this.user.next(user);
+          this.store.dispatch(new AuthActions.Login(user));
         })
       );
   }
 
   logout(){
-    this.user.next(null);
+    this.store.dispatch(new AuthActions.Logout());
     localStorage.removeItem('userData');
   }
 
   autoLogin(){
     const user = JSON.parse(localStorage.getItem('userData'))
     if(user){
-      this.user.next(new User(user.email, user._token));
+      this.store.dispatch(new AuthActions.Login(user))
     }
   }
 }

@@ -1,3 +1,5 @@
+import { AppState } from './../store/app.reducer';
+import { Store } from '@ngrx/store';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -12,14 +14,15 @@ import { DataStorageService } from '../shared/data-storage.service';
 export class HeaderComponent implements OnInit, OnDestroy {
   isAuthenticated = false;
   userSub : Subscription = null;
-  constructor(private dataStorageService: DataStorageService, 
+  constructor(private dataStorageService: DataStorageService,
       private authService : AuthService,
-      private router : Router) {}
-  
+      private router : Router,
+      private store : Store<AppState>) {}
+
   ngOnInit(){
-    this.userSub = this.authService.user.subscribe(
-      user => {
-        if(user){
+    this.userSub = this.store.select('auth').subscribe(
+      authState => {
+        if(authState.user){
           this.isAuthenticated = true;
         }
       }
