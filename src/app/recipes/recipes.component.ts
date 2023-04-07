@@ -1,24 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { RecipeService } from './recipe.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Recipe } from './recipe.model';
 import { DataStorageService } from '../shared/data-storage.service';
-import { AuthService } from '../auth/auth.service';
-import { Router } from '@angular/router';
-import { take } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-recipes',
   templateUrl: './recipes.component.html',
   styleUrls: ['./recipes.component.css']
 })
-export class RecipesComponent  implements OnInit {
+export class RecipesComponent  implements OnInit, OnDestroy {
   selectedRecipe : Recipe;
-  constructor(private recipeService : RecipeService,
-        private dataStorageService:DataStorageService,
-        private authService : AuthService,
-        private router : Router){}
+  dataSub : Subscription;
+  constructor(private dataStorageService:DataStorageService){}
 
   ngOnInit(){
-        this.dataStorageService.fetchRecipes().subscribe();
+        this.dataSub = this.dataStorageService.fetchRecipes().subscribe();
+  }
+
+  ngOnDestroy(): void {
+      this.dataSub.unsubscribe();
   }
 }

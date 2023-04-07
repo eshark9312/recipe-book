@@ -31,6 +31,13 @@ export function authReducer(
         authError: null,
         loading: false
       };
+    case AuthActions.AUTO_LOGIN_SUCCESS:
+      return {
+        ...state,
+        user: action.payload,
+        authError: null,
+        loading: false
+      };
     case AuthActions.LOGIN_FAIL:
       return {
         ...state,
@@ -43,7 +50,26 @@ export function authReducer(
         ...state,
         user: null,
       };
-
+    case AuthActions.AUTO_LOGIN:
+      return state;
+    case AuthActions.SIGNUP_START:
+      return {
+        ...state,
+        loading: true,
+        authError: null
+      };
+    case AuthActions.SIGNUP_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        authError: null
+      };
+    case AuthActions.SIGNUP_FAIL:
+      return {
+        ...state,
+        loading: false,
+        authError: action.payload
+      };
     default:
       return state;
   }

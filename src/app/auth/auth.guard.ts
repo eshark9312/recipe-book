@@ -9,7 +9,6 @@ import {
 import { inject } from '@angular/core';
 import { map, take } from 'rxjs/operators';
 
-import { AuthService } from './auth.service';
 
 
 export const canActivateTeam: CanActivateFn = (

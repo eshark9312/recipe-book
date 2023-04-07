@@ -1,9 +1,8 @@
+import * as  AuthActions from './../auth/store/auth.actions';
 import { AppState } from './../store/app.reducer';
 import { Store } from '@ngrx/store';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AuthService } from '../auth/auth.service';
 import { DataStorageService } from '../shared/data-storage.service';
 
 @Component({
@@ -15,8 +14,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isAuthenticated = false;
   userSub : Subscription = null;
   constructor(private dataStorageService: DataStorageService,
-      private authService : AuthService,
-      private router : Router,
       private store : Store<AppState>) {}
 
   ngOnInit(){
@@ -42,8 +39,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onLogout() {
-    this.authService.logout();
-    this.router.navigate(['/auth']);
+    this.store.dispatch(new AuthActions.Logout())
+    //localStorage.removeItem('userData');
+    //this.router.navigate(['/auth']);
     this.isAuthenticated = false;
   }
 }

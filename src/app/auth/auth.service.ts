@@ -7,7 +7,6 @@ import { AppState } from '../store/app.reducer';
 import { User } from './user.model';
 import * as AuthActions from './store/auth.actions';
 
-
 export interface AuthResponse {
   email: string;
   passwordHash: string;
@@ -17,15 +16,8 @@ export interface AuthResponse {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   //user = new BehaviorSubject<User>(null);
-  private store : Store<AppState>;
-  private http : HttpClient;
 
-  constructor(
-    http : HttpClient, store : Store<AppState>
-    ) {
-      this.http = http;
-      this.store = store;
-    }
+  constructor(private http: HttpClient, private store: Store<AppState>) {}
 
   signUp(email: string, password: string) {
     return this.http
@@ -54,21 +46,21 @@ export class AuthService {
         }),
         tap((resData) => {
           const user = new User(resData.email, resData.token);
-          localStorage.setItem('userData',JSON.stringify(user));
+          localStorage.setItem('userData', JSON.stringify(user));
           this.store.dispatch(new AuthActions.Login(user));
         })
       );
   }
 
-  logout(){
+  logout() {
     this.store.dispatch(new AuthActions.Logout());
     localStorage.removeItem('userData');
   }
 
-  autoLogin(){
-    const user = JSON.parse(localStorage.getItem('userData'))
-    if(user){
-      this.store.dispatch(new AuthActions.Login(user))
+  autoLogin() {
+    const user = JSON.parse(localStorage.getItem('userData'));
+    if (user) {
+      this.store.dispatch(new AuthActions.Login(user));
     }
   }
 }
