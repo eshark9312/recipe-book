@@ -1,7 +1,9 @@
+import { AppState } from './../store/app.reducer';
+import { Store } from '@ngrx/store';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Recipe } from './recipe.model';
-import { DataStorageService } from '../shared/data-storage.service';
-import { Subscription } from 'rxjs';
+
+import * as RecipesActions from './store/recipes.actions';
 
 @Component({
   selector: 'app-recipes',
@@ -10,14 +12,13 @@ import { Subscription } from 'rxjs';
 })
 export class RecipesComponent  implements OnInit, OnDestroy {
   selectedRecipe : Recipe;
-  dataSub : Subscription;
-  constructor(private dataStorageService:DataStorageService){}
+  constructor(private store:Store<AppState>){}
 
   ngOnInit(){
-        this.dataSub = this.dataStorageService.fetchRecipes().subscribe();
+    this.store.dispatch(new RecipesActions.FectchReceipesStart())
   }
 
   ngOnDestroy(): void {
-      this.dataSub.unsubscribe();
+
   }
 }
